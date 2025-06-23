@@ -262,9 +262,25 @@
                         <h3 class="font-bold text-xl mb-2">Meeting Room Check-In System</h3>
                         <p class="text-sm text-gray-700">Configured and deployed the Logitech Tap Scheduler across all head office meeting rooms to optimise room usage and eliminate "ghost meetings" by requiring user check-in.</p>
                     </div>
+                    <div class="scroll-animate project-card bg-blue-50 p-6 rounded-lg shadow-md" data-category="professional">
+                        <h3 class="font-bold text-xl mb-2">Software Inventory Database</h3>
+                        <p class="text-sm text-gray-700">Developed a comprehensive software inventory in Excel, detailing all applications across company devices. This enhanced IT asset visibility, management, and compliance.</p>
+                    </div>
                     <div class="scroll-animate project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
                         <h3 class="font-bold text-xl mb-2">Hangman Web Application</h3>
                         <p class="text-sm text-gray-700">Developed a browser-based Hangman game using HTML, CSS, and JavaScript/jQuery with single-player and multiplayer modes.</p>
+                    </div>
+                    <div class="scroll-animate project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
+                        <h3 class="font-bold text-xl mb-2">Android Job Board App</h3>
+                        <p class="text-sm text-gray-700">Built a job search application for students in Android Studio (Java), integrating Firebase for real-time NoSQL cloud database functionality.</p>
+                    </div>
+                     <div class="scroll-animate project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
+                        <h3 class="font-bold text-xl mb-2">QR Code Generator</h3>
+                        <p class="text-sm text-gray-700">Created a web-based QR code maker using Node.js, allowing users to generate a downloadable QR code image from a URL input.</p>
+                    </div>
+                    <div class="scroll-animate project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
+                        <h3 class="font-bold text-xl mb-2">Wordle Game Clone</h3>
+                        <p class="text-sm text-gray-700">Built a Java-based version of the Wordle game using the MVC design pattern.</p>
                     </div>
                 </div>
             </div>
@@ -347,7 +363,7 @@
 
 
                 projectCards.forEach(card => {
-                    card.style.display = (filter === 'all' || filter === card.dataset.category) ? 'block' : 'none';
+                    card.style.display = (filter === card.dataset.category) ? 'block' : 'none';
                 });
             });
         });
