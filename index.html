@@ -6,6 +6,7 @@
     <title>Javeria Saghir | IT Support Engineer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -72,12 +73,28 @@
             transform: scale(1);
             opacity: 1;
         }
+        .video-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 9999px;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .video-wrapper > div { /* This targets the #youtube-player div */
+            height: 100%;
+            width: 100%;
+        }
         .video-wrapper iframe {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 100%;
-            height: 100%;
+            width: 178%; /* 16:9 aspect ratio */
+            height: 178%;
+            min-width: 100%;
+            min-height: 100%;
             transform: translate(-50%, -50%);
         }
         .scroll-animate {
@@ -88,16 +105,6 @@
         .scroll-animate.visible {
             opacity: 1;
             transform: translateY(0);
-        }
-        @media (min-aspect-ratio: 16/9) {
-            .video-wrapper iframe {
-                height: 56.25vw;
-            }
-        }
-        @media (max-aspect-ratio: 16/9) {
-            .video-wrapper iframe {
-                width: 177.78vh;
-            }
         }
     </style>
 </head>
@@ -277,19 +284,21 @@
     
     <div id="video-avatar-container" class="fixed bottom-4 right-4 z-50">
         <div class="relative w-48 h-48 md:w-56 md:h-56">
-            <div id="video-cta-bubble" class="absolute bottom-20 -left-40 bg-blue-500 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow-lg opacity-0 transition-opacity duration-500 pointer-events-none whitespace-nowrap">
+            <div id="video-cta-bubble" class="absolute bottom-20 -left-44 bg-blue-500 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow-lg opacity-0 transition-opacity duration-500 pointer-events-none whitespace-nowrap">
                 ▶️ Watch My Intro!
             </div>
-            <div class="video-wrapper absolute top-0 left-0 w-full h-full rounded-full overflow-hidden shadow-2xl border-4 border-white">
-                <iframe
-                    id="youtube-player"
-                    src="https://www.youtube-nocookie.com/embed/OlNz6WP3dXk?autoplay=0&loop=1&controls=1&modestbranding=1&showinfo=0&rel=0&playlist=OlNz6WP3dXk&enablejsapi=1"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-                </iframe>
+            <div class="video-wrapper border-4 border-white shadow-2xl">
+                <div id="youtube-player"></div>
             </div>
-            <button id="close-video-avatar" class="absolute -top-1 -right-1 bg-white rounded-full p-1 shadow-lg focus:outline-none hover:bg-gray-200 transition">
+            <button id="play-pause-button" class="absolute inset-0 w-full h-full flex items-center justify-center bg-black bg-opacity-0 rounded-full cursor-pointer group">
+                <div id="play-icon" class="w-16 h-16 bg-black bg-opacity-50 rounded-full flex items-center justify-center transition-transform transform group-hover:scale-110 opacity-100 group-hover:opacity-100">
+                    <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l8.217-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg>
+                </div>
+                 <div id="pause-icon" class="w-16 h-16 bg-black bg-opacity-50 rounded-full flex items-center justify-center transition-transform transform group-hover:scale-110 hidden">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M5.75 4.5a.75.75 0 00-.75.75v9.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V5.25a.75.75 0 00-.75-.75H5.75zm7 0a.75.75 0 00-.75.75v9.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V5.25a.75.75 0 00-.75-.75h-1.5z"></path></svg>
+                </div>
+            </button>
+            <button id="close-video-avatar" class="absolute -top-1 -right-1 bg-white rounded-full p-1 shadow-lg focus:outline-none hover:bg-gray-200 transition z-10">
                 <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
@@ -380,10 +389,77 @@
             }
         });
         
-        // Video Avatar Logic
+        // On-Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
+        });
+    });
+
+    // YouTube IFrame API Logic
+    let player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-player', {
+            height: '100%',
+            width: '100%',
+            videoId: 'OlNz6WP3dXk',
+            playerVars: {
+                'autoplay': 0,
+                'controls': 0,
+                'loop': 1,
+                'playlist': 'OlNz6WP3dXk',
+                'modestbranding': 1,
+                'rel': 0,
+                'showinfo': 0
+            },
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        const playPauseBtn = document.getElementById('play-pause-button');
+        playPauseBtn.addEventListener('click', () => {
+             const playerState = player.getPlayerState();
+            if (playerState === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+        });
+    }
+
+    function onPlayerStateChange(event) {
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const playPauseBtn = document.getElementById('play-pause-button');
+
+        if (event.data === YT.PlayerState.PLAYING) {
+            playIcon.classList.add('hidden');
+            pauseIcon.classList.remove('hidden');
+            playPauseBtn.classList.remove('opacity-100');
+            playPauseBtn.classList.add('opacity-0');
+        } else {
+            playIcon.classList.remove('hidden');
+            pauseIcon.classList.add('hidden');
+            playPauseBtn.classList.add('opacity-100');
+            playPauseBtn.classList.remove('opacity-0');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
         const videoAvatar = document.getElementById('video-avatar-container');
         const closeVideoBtn = document.getElementById('close-video-avatar');
-        const youtubePlayer = document.getElementById('youtube-player');
         const ctaBubble = document.getElementById('video-cta-bubble');
 
         // Show avatar after a short delay
@@ -400,12 +476,11 @@
             if(ctaBubble) ctaBubble.classList.add('opacity-0');
         }, 8000);
 
-
         // Hide avatar and stop video when close button is clicked
         closeVideoBtn.addEventListener('click', () => {
             // Stop the video by calling the YouTube Player API
-            if(youtubePlayer && youtubePlayer.contentWindow) {
-                youtubePlayer.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+            if(player && typeof player.stopVideo === 'function') {
+                player.stopVideo();
             }
             
             videoAvatar.classList.remove('visible');
@@ -420,20 +495,6 @@
             clearTimeout(ctaTimeout);
             clearTimeout(ctaFadeTimeout);
         }, { once: true });
-
-        // On-Scroll Animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.scroll-animate').forEach(el => {
-            observer.observe(el);
-        });
     });
 </script>
 </body>
