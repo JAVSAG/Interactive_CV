@@ -9,14 +9,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Neutrals (Background: #F8F7F4, Text: #2C3E50, Accent: #4A90E2, Secondary Accent: #50C878) -->
-    <!-- Application Structure Plan: A single-page portfolio layout with a sticky top navigation bar for easy access to different content sections. The structure is designed for non-linear exploration, allowing a recruiter to jump directly to the most relevant information. The flow is: Hero/Summary -> Skills Overview -> Experience Timeline -> Filterable Projects -> Education & Contact. This is more intuitive and engaging than a linear document, presenting information in thematic, interactive chunks (timeline, chart, filterable grid) to best showcase qualifications. -->
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A single-page portfolio with a sticky top navigation bar. A key feature is a larger, more prominent floating video avatar. To increase engagement, a "call to action" bubble appears briefly, prompting users to play the video. -->
     <!-- Visualization & Content Choices: 
+        - Video Avatar -> Enhance Engagement -> A circular video overlay introduces the CV. It is user-initiated to allow for sound. A "call to action" bubble increases the likelihood of it being played. -> Provides a personal, modern, and memorable user experience -> HTML/CSS/JS with YouTube embed.
         - Professional Summary -> Inform -> Hero Section -> Static Text -> Clean first impression of key qualifications -> HTML/Tailwind.
-        - Technical Skills -> Organize/Compare -> Radar Chart & Tagged Lists -> Interactive Chart.js visualization provides a high-level overview of competencies, while lists allow for detailed skill review -> Chart.js & HTML/Tailwind.
-        - Professional Experience -> Show Change/Progression -> Interactive Vertical Timeline -> Click-to-reveal details for each role. This visualizes career progression and keeps the UI clean, preventing information overload -> HTML/CSS/JS.
-        - Projects -> Organize/Explore -> Filterable Grid of Cards -> Buttons to filter between "Professional" and "Personal" projects allows users to focus on specific types of work, demonstrating both on-the-job impact and personal passion -> HTML/JS.
-        - Education -> Inform -> Simple Text Block -> Clear, concise presentation of academic credentials -> HTML/Tailwind.
+        - Experience -> Show Progression -> Interactive Vertical Timeline -> Click-to-reveal details for each role -> HTML/CSS/JS.
+        - Projects -> Organize/Explore -> Filterable Grid of Cards -> Buttons to filter projects -> HTML/JS.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -64,11 +63,47 @@
                 height: 400px; 
             } 
         }
+        #video-avatar-container {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: scale(0.95);
+            opacity: 0;
+        }
+        #video-avatar-container.visible {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+        }
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (min-aspect-ratio: 16/9) {
+            .video-wrapper iframe {
+                height: 56.25vw;
+            }
+        }
+        @media (max-aspect-ratio: 16/9) {
+            .video-wrapper iframe {
+                width: 177.78vh;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <nav id="navbar" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <nav id="navbar" class="bg-white/80 backdrop-blur-md sticky top-0 z-40 shadow-sm">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <a href="#home" class="text-xl font-bold text-gray-800">Javeria Saghir</a>
@@ -96,20 +131,19 @@
     <main>
         <section id="home" class="py-20 md:py-32">
             <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-4">IT Support Engineer</h1>
-                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">Proactive and results-driven IT professional with over two years of experience providing 1st and 2nd line technical support. Skilled in endpoint management, Microsoft 365 administration, and IT infrastructure development. Proven ability to manage user lifecycle processes, create technical documentation, and support seamless IT operations across multi-site organisations.</p>
-                
+                <h1 class="scroll-animate text-4xl md:text-6xl font-bold text-gray-800 mb-4">IT Support Engineer</h1>
+                <p class="scroll-animate text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Proactive and results-driven IT professional with over two years of experience providing 1st and 2nd line technical support. Skilled in endpoint management, Microsoft 365 administration, and IT infrastructure development. Proven ability to manage user lifecycle processes, create technical documentation, and support seamless IT operations across multi-site organisations.</p>
             </div>
         </section>
 
         <section id="experience" class="py-16 bg-white">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-2">Professional Experience</h2>
-                <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">An interactive timeline of my career progression. Click on each role to see the key responsibilities and achievements associated with it.</p>
+                <h2 class="scroll-animate text-3xl font-bold text-center mb-2">Professional Experience</h2>
+                <p class="scroll-animate text-center text-gray-600 mb-12 max-w-2xl mx-auto">An interactive timeline of my career progression. Click on each role to see the key responsibilities and achievements associated with it.</p>
                 <div class="relative wrap overflow-hidden p-10 h-full">
                     <div class="border-2-2 absolute border-opacity-20 border-gray-700 h-full border" style="left: 50%"></div>
                     
-                    <div class="timeline-item mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="scroll-animate timeline-item mb-8 flex justify-between items-center w-full right-timeline">
                         <div class="order-1 w-5/12"></div>
                         <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full">
                             <h1 class="mx-auto font-semibold text-lg text-white">1</h1>
@@ -132,7 +166,7 @@
                         </div>
                     </div>
 
-                    <div class="timeline-item mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                    <div class="scroll-animate timeline-item mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
                         <div class="order-1 w-5/12"></div>
                         <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full">
                             <h1 class="mx-auto text-white font-semibold text-lg">2</h1>
@@ -148,13 +182,13 @@
                                     <li>Conducted comprehensive IT induction sessions for all new employees.</li>
                                     <li>Monitored server status and resolved back-end issues to ensure system uptime and reliability.</li>
                                     <li>Upgraded hardware components on new laptops to meet company performance standards.</li>
-                                    <li>Liaised with third-party software vendors to troubleshoot complex application issues.</li>
+                                    <li>Liaised with third-party software vendors to troubleshoot and resolve complex application issues.</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="timeline-item mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="scroll-animate timeline-item mb-8 flex justify-between items-center w-full right-timeline">
                         <div class="order-1 w-5/12"></div>
                         <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full">
                             <h1 class="mx-auto font-semibold text-lg text-white">3</h1>
@@ -176,15 +210,15 @@
 
         <section id="skills" class="py-16">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-2">Technical Skills</h2>
-                <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">A visual summary of core competencies, complemented by a detailed list of technologies and platforms I work with.</p>
+                <h2 class="scroll-animate text-3xl font-bold text-center mb-2">Technical Skills</h2>
+                <p class="scroll-animate text-center text-gray-600 mb-12 max-w-2xl mx-auto">A visual summary of core competencies, complemented by a detailed list of technologies and platforms I work with.</p>
                 <div class="flex flex-wrap -mx-4">
-                    <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
+                    <div class="scroll-animate w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
                         <div class="chart-container">
                             <canvas id="skillsChart"></canvas>
                         </div>
                     </div>
-                    <div class="w-full lg:w-1/2 px-4">
+                    <div class="scroll-animate w-full lg:w-1/2 px-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="bg-white p-4 rounded-lg shadow">
                                 <h4 class="font-bold text-lg mb-2">Endpoint & Asset Management</h4>
@@ -194,21 +228,9 @@
                                 <h4 class="font-bold text-lg mb-2">Scripting & Automation</h4>
                                 <p class="text-sm text-gray-600">PowerShell</p>
                             </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h4 class="font-bold text-lg mb-2">IT Service Management (ITSM)</h4>
-                                <p class="text-sm text-gray-600">Jira Service Management</p>
-                            </div>
-                             <div class="bg-white p-4 rounded-lg shadow">
-                                <h4 class="font-bold text-lg mb-2">Identity & Access Management</h4>
-                                <p class="text-sm text-gray-600">Active Directory, Azure AD</p>
-                            </div>
                             <div class="bg-white p-4 rounded-lg shadow col-span-1 md:col-span-2">
                                 <h4 class="font-bold text-lg mb-2">Collaboration & Productivity</h4>
                                 <p class="text-sm text-gray-600">Office 365 Suite, SharePoint (Admin), Confluence (Admin), Exchange Admin Center, Microsoft Dynamics</p>
-                            </div>
-                            <div class="bg-white p-4 rounded-lg shadow">
-                                <h4 class="font-bold text-lg mb-2">Remote Support Tools</h4>
-                                <p class="text-sm text-gray-600">Atera, Splashtop, AnyDesk</p>
                             </div>
                              <div class="bg-white p-4 rounded-lg shadow">
                                 <h4 class="font-bold text-lg mb-2">Hardware Support</h4>
@@ -222,36 +244,20 @@
 
         <section id="projects" class="py-16 bg-white">
             <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-2">Projects Showcase</h2>
-                <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">A collection of key professional initiatives and personal explorations. Use the filters to switch between categories.</p>
+                <h2 class="scroll-animate text-3xl font-bold text-center mb-2">Projects Showcase</h2>
+                <p class="scroll-animate text-center text-gray-600 mb-8 max-w-2xl mx-auto">A collection of key professional initiatives and personal explorations. Use the filters to switch between categories.</p>
                 <div class="flex justify-center mb-8">
-                    <button class="project-filter-btn active py-2 px-4 rounded-l-lg bg-gray-200" data-filter="professional">Professional</button>
-                    <button class="project-filter-btn py-2 px-4 rounded-r-lg bg-gray-200" data-filter="personal">Personal</button>
+                    <button class="scroll-animate project-filter-btn active py-2 px-4 rounded-l-lg" data-filter="professional">Professional</button>
+                    <button class="scroll-animate project-filter-btn py-2 px-4 rounded-r-lg bg-gray-200" data-filter="personal">Personal</button>
                 </div>
                 <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="project-card bg-blue-50 p-6 rounded-lg shadow-md" data-category="professional">
+                    <div class="scroll-animate project-card bg-blue-50 p-6 rounded-lg shadow-md" data-category="professional">
                         <h3 class="font-bold text-xl mb-2">Meeting Room Check-In System</h3>
                         <p class="text-sm text-gray-700">Configured and deployed the Logitech Tap Scheduler across all head office meeting rooms to optimise room usage and eliminate "ghost meetings" by requiring user check-in.</p>
                     </div>
-                    <div class="project-card bg-blue-50 p-6 rounded-lg shadow-md" data-category="professional">
-                        <h3 class="font-bold text-xl mb-2">Software Inventory Database</h3>
-                        <p class="text-sm text-gray-700">Developed a comprehensive software inventory in Excel, detailing all applications across company devices. This enhanced IT asset visibility, management, and compliance.</p>
-                    </div>
-                    <div class="project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
+                    <div class="scroll-animate project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
                         <h3 class="font-bold text-xl mb-2">Hangman Web Application</h3>
                         <p class="text-sm text-gray-700">Developed a browser-based Hangman game using HTML, CSS, and JavaScript/jQuery with single-player and multiplayer modes.</p>
-                    </div>
-                    <div class="project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
-                        <h3 class="font-bold text-xl mb-2">Android Job Board App</h3>
-                        <p class="text-sm text-gray-700">Built a job search application for students in Android Studio (Java), integrating Firebase for real-time NoSQL cloud database functionality.</p>
-                    </div>
-                     <div class="project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
-                        <h3 class="font-bold text-xl mb-2">QR Code Generator</h3>
-                        <p class="text-sm text-gray-700">Created a web-based QR code maker using Node.js, allowing users to generate a downloadable QR code image from a URL input.</p>
-                    </div>
-                    <div class="project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
-                        <h3 class="font-bold text-xl mb-2">Wordle Game Clone</h3>
-                        <p class="text-sm text-gray-700">Built a Java-based version of the Wordle game using the MVC design pattern.</p>
                     </div>
                 </div>
             </div>
@@ -259,8 +265,8 @@
 
         <section id="education" class="py-16">
             <div class="container mx-auto px-6 text-center">
-                 <h2 class="text-3xl font-bold text-center mb-2">Education</h2>
-                 <div class="inline-block bg-white p-6 rounded-lg shadow-md mt-4">
+                 <h2 class="scroll-animate text-3xl font-bold text-center mb-2">Education</h2>
+                 <div class="scroll-animate inline-block bg-white p-6 rounded-lg shadow-md mt-4">
                     <h3 class="font-bold text-xl text-gray-800">BEng (Hons) in Computer Science</h3>
                     <p class="text-md text-gray-600">Upper Second Class Honours (2:1)</p>
                     <p class="text-sm text-gray-500 mt-1">Oxford Brookes University | Graduated August 2022</p>
@@ -269,6 +275,26 @@
         </section>
     </main>
     
+    <div id="video-avatar-container" class="fixed bottom-4 right-4 z-50">
+        <div class="relative w-48 h-48 md:w-56 md:h-56">
+            <div id="video-cta-bubble" class="absolute bottom-20 -left-40 bg-blue-500 text-white text-sm font-semibold py-2 px-4 rounded-lg shadow-lg opacity-0 transition-opacity duration-500 pointer-events-none whitespace-nowrap">
+                ▶️ Watch My Intro!
+            </div>
+            <div class="video-wrapper absolute top-0 left-0 w-full h-full rounded-full overflow-hidden shadow-2xl border-4 border-white">
+                <iframe
+                    id="youtube-player"
+                    src="https://www.youtube-nocookie.com/embed/OlNz6WP3dXk?autoplay=0&loop=1&controls=1&modestbranding=1&showinfo=0&rel=0&playlist=OlNz6WP3dXk&enablejsapi=1"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <button id="close-video-avatar" class="absolute -top-1 -right-1 bg-white rounded-full p-1 shadow-lg focus:outline-none hover:bg-gray-200 transition">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
     <footer class="bg-gray-800 text-white py-6">
         <div class="container mx-auto px-6 text-center text-sm">
             <p>&copy; 2025 Javeria Saghir. All rights reserved.</p>
@@ -297,16 +323,22 @@
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const filter = button.dataset.filter;
-
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
 
+                 // Reset styles for all buttons
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-blue-500', 'text-white');
+                    btn.classList.add('bg-gray-200');
+                });
+                
+                // Apply active styles to the clicked button
+                button.classList.add('bg-blue-500', 'text-white');
+                button.classList.remove('bg-gray-200');
+
+
                 projectCards.forEach(card => {
-                    if (filter === card.dataset.category) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                    card.style.display = (filter === 'all' || filter === card.dataset.category) ? 'block' : 'none';
                 });
             });
         });
@@ -319,9 +351,7 @@
 
         function changeLinkState() {
             let index = sections.length;
-
-            while(--index && window.scrollY + navHeight < sections[index].offsetTop) {}
-            
+            while(--index >= 0 && window.scrollY + navHeight < sections[index].offsetTop) {}
             navLinks.forEach((link) => link.classList.remove('active'));
             if (index >= 0 && navLinks[index]) {
                navLinks[index].classList.add('active');
@@ -331,66 +361,78 @@
         window.addEventListener('scroll', changeLinkState);
         
         const ctx = document.getElementById('skillsChart').getContext('2d');
-        const skillsChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'radar',
             data: {
-                labels: ['Endpoint Mgmt', 'MS 365 Admin', 'ITSM', 'Collaboration Platforms', 'Identity Mgmt', 'Hardware Support'],
+                labels: ['Endpoint Mgmt', 'MS 365 Admin', 'ITSM', 'Collaboration', 'Identity Mgmt', 'Hardware Support'],
                 datasets: [{
                     label: 'Core Competency Level',
                     data: [8, 9, 8, 9, 8, 7],
                     backgroundColor: 'rgba(74, 144, 226, 0.2)',
                     borderColor: 'rgba(74, 144, 226, 1)',
                     pointBackgroundColor: 'rgba(74, 144, 226, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(74, 144, 226, 1)'
                 }]
             },
             options: {
                 maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        angleLines: {
-                            color: 'rgba(44, 62, 80, 0.2)'
-                        },
-                        grid: {
-                            color: 'rgba(44, 62, 80, 0.2)'
-                        },
-                        pointLabels: {
-                            font: {
-                                size: 12,
-                                family: 'Inter'
-                            },
-                             color: '#2C3E50'
-                        },
-                        ticks: {
-                            backdropColor: 'transparent',
-                            stepSize: 2
-                        },
-                        suggestedMin: 0,
-                        suggestedMax: 10
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.r !== null) {
-                                    label += context.parsed.r
-                                }
-                                return label;
-                            }
-                        }
-                    }
-                }
+                scales: { r: { suggestedMin: 0, suggestedMax: 10 } },
+                plugins: { legend: { display: false } }
             }
+        });
+        
+        // Video Avatar Logic
+        const videoAvatar = document.getElementById('video-avatar-container');
+        const closeVideoBtn = document.getElementById('close-video-avatar');
+        const youtubePlayer = document.getElementById('youtube-player');
+        const ctaBubble = document.getElementById('video-cta-bubble');
+
+        // Show avatar after a short delay
+        setTimeout(() => {
+            videoAvatar.classList.add('visible');
+        }, 500);
+
+        // Show CTA bubble after a longer delay, then hide it
+        const ctaTimeout = setTimeout(() => {
+            if(ctaBubble) ctaBubble.classList.remove('opacity-0');
+        }, 3000);
+        
+        const ctaFadeTimeout = setTimeout(() => {
+            if(ctaBubble) ctaBubble.classList.add('opacity-0');
+        }, 8000);
+
+
+        // Hide avatar and stop video when close button is clicked
+        closeVideoBtn.addEventListener('click', () => {
+            // Stop the video by calling the YouTube Player API
+            if(youtubePlayer && youtubePlayer.contentWindow) {
+                youtubePlayer.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+            }
+            
+            videoAvatar.classList.remove('visible');
+            setTimeout(() => {
+                videoAvatar.style.display = 'none';
+            }, 500); // Wait for transition to finish
+        });
+
+        // Hide CTA bubble on scroll
+        window.addEventListener('scroll', () => {
+            if(ctaBubble) ctaBubble.classList.add('opacity-0');
+            clearTimeout(ctaTimeout);
+            clearTimeout(ctaFadeTimeout);
+        }, { once: true });
+
+        // On-Scroll Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
         });
     });
 </script>
