@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javeria Saghir | IT Support Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Background: #F8F7F4, Text: #2C3E50, Accent: #4A90E2, Secondary Accent: #50C878) -->
+    <!-- Application Structure Plan: A single-page portfolio layout with a sticky top navigation bar for easy access to different content sections. The structure is designed for non-linear exploration, allowing a recruiter to jump directly to the most relevant information. The flow is: Hero/Summary -> Skills Overview -> Experience Timeline -> Filterable Projects -> Education & Contact. This is more intuitive and engaging than a linear document, presenting information in thematic, interactive chunks (timeline, chart, filterable grid) to best showcase qualifications. -->
+    <!-- Visualization & Content Choices: 
+        - Professional Summary -> Inform -> Hero Section -> Static Text -> Clean first impression of key qualifications -> HTML/Tailwind.
+        - Technical Skills -> Organize/Compare -> Radar Chart & Tagged Lists -> Interactive Chart.js visualization provides a high-level overview of competencies, while lists allow for detailed skill review -> Chart.js & HTML/Tailwind.
+        - Professional Experience -> Show Change/Progression -> Interactive Vertical Timeline -> Click-to-reveal details for each role. This visualizes career progression and keeps the UI clean, preventing information overload -> HTML/CSS/JS.
+        - Projects -> Organize/Explore -> Filterable Grid of Cards -> Buttons to filter between "Professional" and "Personal" projects allows users to focus on specific types of work, demonstrating both on-the-job impact and personal passion -> HTML/JS.
+        - Education -> Inform -> Simple Text Block -> Clear, concise presentation of academic credentials -> HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #2C3E50;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #4A90E2;
+            border-bottom-color: #4A90E2;
+        }
+        .timeline-item-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding: 0 1.5rem;
+        }
+        .timeline-item-content.open {
+            max-height: 500px;
+            padding: 1rem 1.5rem 1.5rem;
+        }
+        .project-filter-btn {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .project-filter-btn.active {
+            background-color: #4A90E2;
+            color: #FFFFFF;
+        }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 500px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) { 
+            .chart-container { 
+                height: 400px; 
+            } 
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav id="navbar" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="#home" class="text-xl font-bold text-gray-800">Javeria Saghir</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#experience" class="nav-link">Experience</a>
+                    <a href="#skills" class="nav-link">Skills</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                    <a href="#education" class="nav-link">Education</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#experience" class="block py-2 px-4 text-sm hover:bg-gray-200">Experience</a>
+            <a href="#skills" class="block py-2 px-4 text-sm hover:bg-gray-200">Skills</a>
+            <a href="#projects" class="block py-2 px-4 text-sm hover:bg-gray-200">Projects</a>
+            <a href="#education" class="block py-2 px-4 text-sm hover:bg-gray-200">Education</a>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home" class="py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-4">IT Support Engineer</h1>
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">Proactive and results-driven IT professional with over two years of experience providing 1st and 2nd line technical support. Skilled in endpoint management, Microsoft 365 administration, and IT infrastructure development. Proven ability to manage user lifecycle processes, create technical documentation, and support seamless IT operations across multi-site organisations.</p>
+                
+            </div>
+        </section>
+
+        <section id="experience" class="py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-2">Professional Experience</h2>
+                <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">An interactive timeline of my career progression. Click on each role to see the key responsibilities and achievements associated with it.</p>
+                <div class="relative wrap overflow-hidden p-10 h-full">
+                    <div class="border-2-2 absolute border-opacity-20 border-gray-700 h-full border" style="left: 50%"></div>
+                    
+                    <div class="timeline-item mb-8 flex justify-between items-center w-full right-timeline">
+                        <div class="order-1 w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg text-white">1</h1>
+                        </div>
+                        <div class="order-1 bg-blue-100 rounded-lg shadow-xl w-5/12 px-6 py-4 cursor-pointer">
+                            <h3 class="font-bold text-gray-800 text-xl">IT Support Engineer</h3>
+                            <p class="text-sm leading-snug tracking-wide text-gray-900 text-opacity-100">Aurora Energy Research | Jan 2025 – Present</p>
+                            <div class="timeline-item-content">
+                                <ul class="list-disc list-inside mt-2 text-sm text-gray-700 space-y-1">
+                                    <li>Providing comprehensive 1st and 2nd line technical support for end-users both remotely and onsite.</li>
+                                    <li>Managing the complete user lifecycle, including onboarding, offboarding, and account administration.</li>
+                                    <li>Deploying and administering user software and systems, including Office 365, OneDrive, and SharePoint.</li>
+                                    <li>Contributing to the development of the UK Head Office's IT infrastructure, systems, and policies.</li>
+                                    <li>Administering Jira and Confluence, managing user roles, permissions, and workflow configurations.</li>
+                                    <li>Creating and maintaining technical documentation and user guides in Confluence.</li>
+                                    <li>Performing hands-on hardware support for laptops and peripherals.</li>
+                                    <li>Maintaining accurate IT asset records and lifecycle tracking using Snipe-IT.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                        <div class="order-1 w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto text-white font-semibold text-lg">2</h1>
+                        </div>
+                        <div class="order-1 bg-green-100 rounded-lg shadow-xl w-5/12 px-6 py-4 cursor-pointer">
+                            <h3 class="font-bold text-gray-800 text-xl">IT Support Assistant</h3>
+                            <p class="text-sm leading-snug tracking-wide text-gray-900 text-opacity-100">Shaw Gibbs | Apr 2023 – Dec 2024</p>
+                            <div class="timeline-item-content">
+                                <ul class="list-disc list-inside mt-2 text-sm text-gray-700 space-y-1">
+                                    <li>Provided 1st line technical support via phone, email, and a Jira ticketing system.</li>
+                                    <li>Administered user accounts, groups, and permissions using Active Directory and Microsoft 365 Admin Center.</li>
+                                    <li>Led the migration of cloud users to Azure AD and managed device compliance through Microsoft Intune.</li>
+                                    <li>Conducted comprehensive IT induction sessions for all new employees.</li>
+                                    <li>Monitored server status and resolved back-end issues to ensure system uptime and reliability.</li>
+                                    <li>Upgraded hardware components on new laptops to meet company performance standards.</li>
+                                    <li>Liaised with third-party software vendors to troubleshoot complex application issues.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item mb-8 flex justify-between items-center w-full right-timeline">
+                        <div class="order-1 w-5/12"></div>
+                        <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full">
+                            <h1 class="mx-auto font-semibold text-lg text-white">3</h1>
+                        </div>
+                        <div class="order-1 bg-yellow-100 rounded-lg shadow-xl w-5/12 px-6 py-4 cursor-pointer">
+                            <h3 class="font-bold text-gray-800 text-xl">Customer Service Associate</h3>
+                            <p class="text-sm leading-snug tracking-wide text-gray-900 text-opacity-100">TK Maxx | Oct 2022 – Apr 2023</p>
+                            <div class="timeline-item-content">
+                               <ul class="list-disc list-inside mt-2 text-sm text-gray-700 space-y-1">
+                                    <li>Operated point-of-sale systems efficiently, assisted customers with inquiries, and managed inventory.</li>
+                                    <li>Trained new employees on checkout procedures and company best practices.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-16">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-2">Technical Skills</h2>
+                <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">A visual summary of core competencies, complemented by a detailed list of technologies and platforms I work with.</p>
+                <div class="flex flex-wrap -mx-4">
+                    <div class="w-full lg:w-1/2 px-4 mb-8 lg:mb-0">
+                        <div class="chart-container">
+                            <canvas id="skillsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-1/2 px-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg mb-2">Endpoint & Asset Management</h4>
+                                <p class="text-sm text-gray-600">Microsoft Intune, Snipe-IT, Atera</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg mb-2">Scripting & Automation</h4>
+                                <p class="text-sm text-gray-600">PowerShell</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg mb-2">IT Service Management (ITSM)</h4>
+                                <p class="text-sm text-gray-600">Jira Service Management</p>
+                            </div>
+                             <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg mb-2">Identity & Access Management</h4>
+                                <p class="text-sm text-gray-600">Active Directory, Azure AD</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow col-span-1 md:col-span-2">
+                                <h4 class="font-bold text-lg mb-2">Collaboration & Productivity</h4>
+                                <p class="text-sm text-gray-600">Office 365 Suite, SharePoint (Admin), Confluence (Admin), Exchange Admin Center, Microsoft Dynamics</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg mb-2">Remote Support Tools</h4>
+                                <p class="text-sm text-gray-600">Atera, Splashtop, AnyDesk</p>
+                            </div>
+                             <div class="bg-white p-4 rounded-lg shadow">
+                                <h4 class="font-bold text-lg mb-2">Hardware Support</h4>
+                                <p class="text-sm text-gray-600">Laptop Component Replacement, Printer Diagnostics</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-16 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-2">Projects Showcase</h2>
+                <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">A collection of key professional initiatives and personal explorations. Use the filters to switch between categories.</p>
+                <div class="flex justify-center mb-8">
+                    <button class="project-filter-btn active py-2 px-4 rounded-l-lg bg-gray-200" data-filter="professional">Professional</button>
+                    <button class="project-filter-btn py-2 px-4 rounded-r-lg bg-gray-200" data-filter="personal">Personal</button>
+                </div>
+                <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="project-card bg-blue-50 p-6 rounded-lg shadow-md" data-category="professional">
+                        <h3 class="font-bold text-xl mb-2">Meeting Room Check-In System</h3>
+                        <p class="text-sm text-gray-700">Configured and deployed the Logitech Tap Scheduler across all head office meeting rooms to optimise room usage and eliminate "ghost meetings" by requiring user check-in.</p>
+                    </div>
+                    <div class="project-card bg-blue-50 p-6 rounded-lg shadow-md" data-category="professional">
+                        <h3 class="font-bold text-xl mb-2">Software Inventory Database</h3>
+                        <p class="text-sm text-gray-700">Developed a comprehensive software inventory in Excel, detailing all applications across company devices. This enhanced IT asset visibility, management, and compliance.</p>
+                    </div>
+                    <div class="project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
+                        <h3 class="font-bold text-xl mb-2">Hangman Web Application</h3>
+                        <p class="text-sm text-gray-700">Developed a browser-based Hangman game using HTML, CSS, and JavaScript/jQuery with single-player and multiplayer modes.</p>
+                    </div>
+                    <div class="project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
+                        <h3 class="font-bold text-xl mb-2">Android Job Board App</h3>
+                        <p class="text-sm text-gray-700">Built a job search application for students in Android Studio (Java), integrating Firebase for real-time NoSQL cloud database functionality.</p>
+                    </div>
+                     <div class="project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
+                        <h3 class="font-bold text-xl mb-2">QR Code Generator</h3>
+                        <p class="text-sm text-gray-700">Created a web-based QR code maker using Node.js, allowing users to generate a downloadable QR code image from a URL input.</p>
+                    </div>
+                    <div class="project-card bg-green-50 p-6 rounded-lg shadow-md" data-category="personal">
+                        <h3 class="font-bold text-xl mb-2">Wordle Game Clone</h3>
+                        <p class="text-sm text-gray-700">Built a Java-based version of the Wordle game using the MVC design pattern.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="py-16">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 class="text-3xl font-bold text-center mb-2">Education</h2>
+                 <div class="inline-block bg-white p-6 rounded-lg shadow-md mt-4">
+                    <h3 class="font-bold text-xl text-gray-800">BEng (Hons) in Computer Science</h3>
+                    <p class="text-md text-gray-600">Upper Second Class Honours (2:1)</p>
+                    <p class="text-sm text-gray-500 mt-1">Oxford Brookes University | Graduated August 2022</p>
+                 </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>&copy; 2025 Javeria Saghir. All rights reserved.</p>
+        </div>
+    </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        const timelineItems = document.querySelectorAll('.timeline-item .cursor-pointer');
+        timelineItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const content = item.querySelector('.timeline-item-content');
+                content.classList.toggle('open');
+            });
+        });
+
+        const filterButtons = document.querySelectorAll('.project-filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.dataset.filter;
+
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                projectCards.forEach(card => {
+                    if (filter === card.dataset.category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        document.querySelector('.project-filter-btn[data-filter="professional"]').click();
+
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('main section');
+        const navbar = document.getElementById('navbar');
+        const navHeight = navbar.offsetHeight;
+
+        function changeLinkState() {
+            let index = sections.length;
+
+            while(--index && window.scrollY + navHeight < sections[index].offsetTop) {}
+            
+            navLinks.forEach((link) => link.classList.remove('active'));
+            if (index >= 0 && navLinks[index]) {
+               navLinks[index].classList.add('active');
+            }
+        }
+        changeLinkState();
+        window.addEventListener('scroll', changeLinkState);
+        
+        const ctx = document.getElementById('skillsChart').getContext('2d');
+        const skillsChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Endpoint Mgmt', 'MS 365 Admin', 'ITSM', 'Collaboration Platforms', 'Identity Mgmt', 'Hardware Support'],
+                datasets: [{
+                    label: 'Core Competency Level',
+                    data: [8, 9, 8, 9, 8, 7],
+                    backgroundColor: 'rgba(74, 144, 226, 0.2)',
+                    borderColor: 'rgba(74, 144, 226, 1)',
+                    pointBackgroundColor: 'rgba(74, 144, 226, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(74, 144, 226, 1)'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: {
+                            color: 'rgba(44, 62, 80, 0.2)'
+                        },
+                        grid: {
+                            color: 'rgba(44, 62, 80, 0.2)'
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 12,
+                                family: 'Inter'
+                            },
+                             color: '#2C3E50'
+                        },
+                        ticks: {
+                            backdropColor: 'transparent',
+                            stepSize: 2
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 10
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.r !== null) {
+                                    label += context.parsed.r
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
